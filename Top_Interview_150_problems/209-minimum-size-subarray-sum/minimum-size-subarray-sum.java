@@ -14,6 +14,9 @@ class Solution {
 
             while(sum >= target){
                 result = Math.min(result, right - left + 1);
+                if (result == 1){
+                    return result;
+                }
                 sum -= nums[left];
                 left++;
             }
