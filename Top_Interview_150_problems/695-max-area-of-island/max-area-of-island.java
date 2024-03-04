@@ -1,6 +1,6 @@
 class Solution {
 
-    public int maxAreaOfIsland(int[][] grid) {
+     public int maxAreaOfIsland(int[][] grid) {
         int rows = grid.length;
         int cols = grid[0].length;
         int maxArea = 0;
@@ -8,31 +8,38 @@ class Solution {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (grid[i][j] == 1) {
-                    maxArea = Math.max(maxArea, dfs(grid, i, j));
+                    maxArea = Math.max(maxArea, calculateAreaIterative(grid, i, j));
                 }
             }
         }
-
         return maxArea;
     }
 
-    private int dfs(int[][] grid, int row, int col) {
-        // Check if out of bounds or if current cell is water
-        if (row < 0 || row >= grid.length || col < 0 || col >= grid[0].length || grid[row][col] == 0) {
-            return 0;
+    private int calculateAreaIterative(int[][] grid, int row, int col) {
+        Stack<int[]> stack = new Stack<>();
+        stack.push(new int[]{row, col});
+        grid[row][col] = 0; // Mark as visited
+        int area = 0;
+
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+        while (!stack.isEmpty()) {
+            int[] current = stack.pop();
+            area++;
+
+            // Explore valid neighbors
+            for (int[] dir : directions) {
+                int newRow = current[0] + dir[0];
+                int newCol = current[1] + dir[1];
+
+                if (newRow >= 0 && newRow < grid.length &&
+                        newCol >= 0 && newCol < grid[0].length &&
+                        grid[newRow][newCol] == 1) {
+                    stack.push(new int[]{newRow, newCol});
+                    grid[newRow][newCol] = 0; // Mark as visited
+                }
+            }
         }
-
-        // Mark current cell as visited (sink the island)
-        grid[row][col] = 0;
-
-        int area = 1;  // Count the current cell
-
-        // Explore neighbors recursively using DFS
-        area += dfs(grid, row - 1, col); // Up
-        area += dfs(grid, row + 1, col); // Down
-        area += dfs(grid, row, col - 1); // Left
-        area += dfs(grid, row, col + 1); // Right
-
         return area;
     }
 
