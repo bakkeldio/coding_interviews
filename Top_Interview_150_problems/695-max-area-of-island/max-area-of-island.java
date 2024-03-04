@@ -1,5 +1,8 @@
 class Solution {
 
+    int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+
     public int maxAreaOfIsland(int[][] grid) {
         int rows = grid.length;
         int cols = grid[0].length;
@@ -20,8 +23,6 @@ class Solution {
         stack.push(new int[]{row, col});
         grid[row][col] = 0; // Mark as visited
         int area = 0;
-
-        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
         while (!stack.isEmpty()) {
             int[] current = stack.pop();
