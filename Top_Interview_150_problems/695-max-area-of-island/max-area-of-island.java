@@ -1,49 +1,39 @@
 class Solution {
-    
-    int[][] directions = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
-    
-    int n; 
-    int m;
-    int answer = 0;
 
-    
     public int maxAreaOfIsland(int[][] grid) {
-        
-        n = grid.length; 
-        m = grid[0].length;
-            
-        int max = Integer.MIN_VALUE;
-        boolean[][] visited = new boolean[n][m];
-        
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++){
-                if (grid[i][j] == 1 && !visited[i][j]){
-                    visited[i][j] = true;
-                    answer = 1;
-                    dfs(i, j, grid, visited);
-                    max = Math.max(max, answer);
+        int rows = grid.length;
+        int cols = grid[0].length;
+        int maxArea = 0;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (grid[i][j] == 1) {
+                    maxArea = Math.max(maxArea, dfs(grid, i, j));
                 }
             }
         }
-        
-        return max == Integer.MIN_VALUE ? 0 : max;
-    
+
+        return maxArea;
     }
-    
-    public boolean isValid(int i, int j, int[][] graph) {
-        return i >= 0 && i < n && j >= 0 && j < m && graph[i][j] == 1;
+
+    private int dfs(int[][] grid, int row, int col) {
+        // Check if out of bounds or if current cell is water
+        if (row < 0 || row >= grid.length || col < 0 || col >= grid[0].length || grid[row][col] == 0) {
+            return 0;
+        }
+
+        // Mark current cell as visited (sink the island)
+        grid[row][col] = 0;
+
+        int area = 1;  // Count the current cell
+
+        // Explore neighbors recursively using DFS
+        area += dfs(grid, row - 1, col); // Up
+        area += dfs(grid, row + 1, col); // Down
+        area += dfs(grid, row, col - 1); // Left
+        area += dfs(grid, row, col + 1); // Right
+
+        return area;
     }
-    
-    public void dfs(int i, int j, int[][] graph, boolean[][] visited) {
-        for (int[] direction : directions) {
-            int r = i + direction[0];
-            int c = j + direction[1];
-            
-            if (isValid(r, c, graph) && !visited[r][c]) {
-                visited[r][c] = true;
-                answer++;
-                dfs(r, c, graph, visited);
-            }
-        } 
-    }
+
 }
