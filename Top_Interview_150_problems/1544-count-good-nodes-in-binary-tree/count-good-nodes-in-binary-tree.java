@@ -15,21 +15,18 @@
  */
 class Solution {
     public int goodNodes(TreeNode root) {
-        return countGoodNodes(root, Integer.MIN_VALUE); 
+        return goodNodesHelper(root, Integer.MIN_VALUE);
     }
 
-    private int countGoodNodes(TreeNode node, int maxSoFar) {
+    private int goodNodesHelper(TreeNode node, int currentPathMax) {
         if (node == null) {
-            return 0; // Base case: empty node
+            return 0;
         }
 
-        int result = node.val >= maxSoFar ? 1 : 0; // Is this node good?
-        maxSoFar = Math.max(maxSoFar, node.val);  // Update maximum for children
+        int goodNodesCount = node.val >= currentPathMax ? 1 : 0;
+        goodNodesCount += goodNodesHelper(node.left, Math.max(currentPathMax, node.val));
+        goodNodesCount += goodNodesHelper(node.right, Math.max(currentPathMax, node.val));
 
-        // Recursively explore left and right subtrees
-        result += countGoodNodes(node.left, maxSoFar);
-        result += countGoodNodes(node.right, maxSoFar);
-
-        return result;
+        return goodNodesCount;
     }
 }
