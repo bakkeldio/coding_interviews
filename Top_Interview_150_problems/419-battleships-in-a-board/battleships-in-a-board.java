@@ -1,30 +1,39 @@
 class Solution {
-    public int countBattleships(char[][] board) {
-        if (board == null || board.length == 0) {
-            return 0;
-        }
-
-        int m = board.length;
-        int n = board[0].length;
-        int count = 0;
-
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (board[i][j] == '.') {
-                    continue;
+    public int countBattleships(char[][] board)
+    {
+        int m=board.length;
+        int n=board[0].length;
+        boolean[][] vis=new boolean[m][n];
+        int ans=0;
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(vis[i][j]==false && board[i][j]=='X')
+                {
+                    dfs(i,j,board,vis);
+                    ans++;
                 }
-                // We only count the "head" of the battleship
-                if (i > 0 && board[i - 1][j] == 'X') {
-                    continue;
-                }
-                if (j > 0 && board[i][j - 1] == 'X') {
-                    continue;
-                }
-                count++;
             }
         }
-
-        return count;
+        return ans;
+    }
+    
+    public void dfs(int i, int j, char[][] board, boolean[][] vis)
+    {
+        if(i<0 || i>=board.length || j<0 || j>=board[0].length || vis[i][j])
+        {
+            return;
+        }
+        
+        if(board[i][j]=='.')
+        {
+            return;
+        }
+        
+        vis[i][j]=true;
+        dfs(i,j+1,board,vis);
+        dfs(i+1,j,board,vis);
     }
 
 }
