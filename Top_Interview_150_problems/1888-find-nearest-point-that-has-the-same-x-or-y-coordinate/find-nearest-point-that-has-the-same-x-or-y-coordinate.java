@@ -1,7 +1,6 @@
 class Solution {
     public int nearestValidPoint(int x, int y, int[][] points) {
         
-
         int min = Integer.MAX_VALUE;
 
         int index = -1;
@@ -15,14 +14,11 @@ class Solution {
                 min = Math.min(min, Math.abs(x - x2) + Math.abs(y - y2));
                 if (min != prevMin) {
                     index = i;
-                } else {
-                    index = Math.min(index, i);
                 }
             }
         }
 
         return index;
-
 
     }
 }
