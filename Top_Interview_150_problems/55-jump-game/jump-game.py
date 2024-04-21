@@ -6,5 +6,5 @@ class Solution(object):
         for i in range(len(nums)-1, -1, -1):
             if i + nums[i] >= lastPos:
                 lastPos = i
-        return lastPos == 0    
+        return lastPos == 0
         
