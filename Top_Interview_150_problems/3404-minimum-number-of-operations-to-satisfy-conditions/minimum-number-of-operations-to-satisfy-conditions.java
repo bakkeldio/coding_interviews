@@ -1,5 +1,7 @@
 class Solution {
     
+
+    /*
     public int columnSize;
     public int rowSize;
     public int dp[][];
@@ -45,5 +47,49 @@ class Solution {
         for (int i = 0; i <= 9; i++) if (i != currentDigit) minCost = Math.min(minCost, cost + helper(currentColumn + 1, i, grid));
 
         return dp[currentColumn][currentDigit] = minCost;
+    }
+
+    **/
+
+    public int minimumOperations(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        int[][] dp = new int[n + 1][10]; // DP table: dp[col][digit]
+
+        // Base Case: The first column can have any digit.
+        for (int i = 0; i < m; i++) {
+            dp[0][grid[i][0]] = 0; 
+        }
+
+        // Fill up the dp table
+        for (int col = 1; col <= n; col++) {
+            for (int curDigit = 0; curDigit <= 9; curDigit++) {
+                int cost = 0;
+
+                // Calculate the cost of changing all elements to curDigit in the current column
+                for (int row = 0; row < m; row++) {
+                    if (grid[row][col - 1] != curDigit) {
+                        cost++;  
+                    }
+                }
+
+                // Iterate over possible digits in the previous column to figure out minimum cost
+                int minCost = Integer.MAX_VALUE;
+                for (int prevDigit = 0; prevDigit <= 9; prevDigit++) {
+                    if (prevDigit != curDigit) {
+                        minCost = Math.min(minCost, dp[col - 1][prevDigit] + cost);
+                    }
+                }
+
+                dp[col][curDigit] = minCost;
+            } 
+        }
+
+        // Find the minimum in the last column (consider all possible digits)
+        int minOperations = Integer.MAX_VALUE;
+        for (int digit = 0; digit <= 9; digit++) {
+            minOperations = Math.min(minOperations, dp[n][digit]);
+        }
+
+        return minOperations;
     }
 }
