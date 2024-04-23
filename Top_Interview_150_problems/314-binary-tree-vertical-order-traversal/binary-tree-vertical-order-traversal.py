@@ -1,39 +1,40 @@
 # Definition for a binary tree node.
-# class TreeNode(object):
+# class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
 #         self.val = val
 #         self.left = left
 #         self.right = right
-class Solution(object):
-    def verticalOrder(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[List[int]]
-        """
+class Solution:
+    def verticalOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
 
-    def verticalOrder(self, root):
         if not root:
             return []
 
 
         columnTable = defaultdict(list)
         min_column = max_column = 0
-        queue = deque([(root, 0)])
 
 
-        while queue:
-            node, column = queue.popleft()
-
-
+        def dfs(node, column, row):
+            nonlocal min_column, max_column
             if node is not None:
-                columnTable[column].append(node.val)
+                columnTable[column].append((row, node.val))
                 min_column = min(min_column, column)
                 max_column = max(max_column, column)
 
 
-                queue.append((node.left, column - 1))
-                queue.append((node.right, column + 1))
+                dfs(node.left, column - 1, row + 1)
+                dfs(node.right, column + 1, row + 1)
 
 
-        return [columnTable[x] for x in range(min_column, max_column + 1)]    
+        dfs(root, 0, 0)
+
+
+        result = []
+        for i in range(min_column, max_column + 1):
+            columnTable[i].sort(key=lambda x: x[0])
+            result.append([val for row, val in columnTable[i]])
+
+
+        return result    
         
