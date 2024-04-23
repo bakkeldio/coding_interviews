@@ -5,8 +5,7 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def verticalOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
-
+    def verticalOrder(self, root):
         if not root:
             return []
 
@@ -36,5 +35,5 @@ class Solution:
             result.append([val for row, val in columnTable[i]])
 
 
-        return result    
+        return result
         
