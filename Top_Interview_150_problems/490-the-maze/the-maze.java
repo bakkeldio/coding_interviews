@@ -14,32 +14,31 @@ class Solution {
             int[] current = queue.poll();
 
             if (current[0] == destination[0] && current[1] == destination[1]) {
-                return true; // Reached the destination
+                return true; // Found the destination
             }
 
-            // Explore in all directions from the current position
             for (int[] dir : DIRECTIONS) {
                 int row = current[0] + dir[0];
                 int col = current[1] + dir[1];
 
-                // Roll until we hit a wall or the border
+                // Keep rolling in the same direction until hitting a wall or boundary
                 while (row >= 0 && row < m && col >= 0 && col < n && maze[row][col] == 0) {
                     row += dir[0];
                     col += dir[1];
                 }
 
-                // Backtrack one step to the position where the ball stopped
+                // Backtrack one step to the valid position before the wall
                 row -= dir[0]; 
-                col -= dir[1];
+                col -= dir[1]; 
 
                 if (!visited[row][col]) {
-                    queue.offer(new int[]{row, col});
                     visited[row][col] = true;
+                    queue.offer(new int[]{row, col});
                 }
             }
         }
 
-        return false; // No path found
+        return false; // Destination not reachable
     }
 
 
